@@ -1,17 +1,9 @@
 
 #include "Boids.h"
 #include "time.h"
-#include <Vector>
+#include <algorithm>
+#include <vector>
 #include "imgui/imgui.h"
-
-
-constexpr float DriverSpeed = 0.65f;
-// How speed of boids are dragged. The lower the value, the more drag is applied. % of the speed preserved for the frame
-constexpr float DragBoidSpeed = 0.1f;
-// Boid's speed is clamped to MaxBoidSpeed
-constexpr float MaxBoidSpeed = 200.f;
-// Radius of neighborhood
-constexpr float NeighborhoodRadius = 50.f;
 
 
 struct Boid : public BoidData
@@ -53,6 +45,14 @@ private:
 
 	std::vector<Boid> Boids;
 
+	// Settings
+	float DriverSpeed = 0.75f;
+	// How speed of boids are dragged. The lower the value, the more drag is applied. % of the speed preserved for the frame
+	float DragBoidSpeed = 0.1f;
+	// Boid's speed is clamped to MaxBoidSpeed
+	float MaxBoidSpeed = 200.f;
+	// Radius of neighborhood
+	float NeighborhoodRadius = 50.f;
 };
 
 BoidsSystemImplementation BoidsSystemImplementation::System;
@@ -71,7 +71,7 @@ void BoidsSystemImplementation::InitializeBoids(int NumBoids, int InScreenWidth,
 	DriverTime = 0.f;
 
 	Boids = std::vector<Boid>(NumBoids);
-	srand(time(nullptr));
+	srand((unsigned int)time(nullptr));
 	for (size_t Index = 0; Index < NumBoids; ++Index)
 	{
 		float x = ScreenWidth * (float)rand() / RAND_MAX;
@@ -82,12 +82,23 @@ void BoidsSystemImplementation::InitializeBoids(int NumBoids, int InScreenWidth,
 
 void BoidsSystemImplementation::ShowGui()
 {
+	if (ImGui::CollapsingHeader("General Settings"))
+	{
 
+	}
+	if (ImGui::CollapsingHeader("Driver Settings"))
+	{
+		if (ImGui::InputFloat("Speed", &DriverSpeed, 0.05f, 0.f, "%.2f"))
+		{
+			DriverSpeed = std::clamp(DriverSpeed, 0.1f, 3.f);
+		}
+
+	}
 }
 
 void BoidsSystemImplementation::RenderAdditionalData()
 {
-	DrawCircle(Driver.x, Driver.y, 5, {0, 0, 255, 255});
+	DrawCircle((int)Driver.x, (int)Driver.y, 5, {0, 0, 255, 255});
 }
 
 void BoidsSystemImplementation::SimulateBoids(float DeltaTime)

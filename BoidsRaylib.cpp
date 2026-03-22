@@ -35,9 +35,11 @@ int main()
 	InitWindow(screenWidth, screenHeight, "Boids");
 	SetTargetFPS(144);
 	rlImGuiSetup(true);
+	bool bBoidsSettingWindowOpen = true;
 
 	//--------------------------------------------------------------------------------------
 
+	// Initialize boids
 	BoidsSystem* BoidSystem = BoidsSystem::GetSystem();
 	BoidSystem->InitializeBoids(50, screenWidth, screenHeight);
 
@@ -61,12 +63,10 @@ int main()
 			rlImGuiBegin();
 
 			// show ImGui Content
-			bool open = true;
-			ImGui::ShowDemoWindow(&open);
-			open = true;
-			if (ImGui::Begin("Test Window", &open))
+			//ImGui::ShowDemoWindow(&open);
+			if (ImGui::Begin("Boids Settings", &bBoidsSettingWindowOpen))
 			{
-				ImGui::TextUnformatted(ICON_FA_JEDI);
+				BoidSystem->ShowGui();
 			}
 			ImGui::End();
 
