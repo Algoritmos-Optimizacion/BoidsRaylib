@@ -23,11 +23,17 @@ inline Vector2 operator*(const Vector2& Operator, float Multiplier)
 	return { Operator.x * Multiplier, Operator.y * Multiplier };
 }
 
-inline Vector2 operator*=(Vector2 Operator, float Multiplier)
+inline Vector2 operator*=(Vector2& Operator, float Multiplier)
 {
 	Operator.x *= Multiplier;
 	Operator.y *= Multiplier;
 	return Operator;
+}
+
+inline Vector2 operator+=(Vector2& Operator1, const Vector2& Operator2)
+{
+	Operator1 = Operator1 + Operator2;
+	return Operator1;
 }
 
 inline float Module(const Vector2& Vector)
@@ -39,4 +45,10 @@ inline Vector2 ClampSize(const Vector2& Vector, float MaxSize)
 {
 	float CurSize = Module(Vector);
 	return CurSize > MaxSize ? Vector * (MaxSize / CurSize) : Vector;
+}
+
+inline Vector2 ClampSize(const Vector2& Vector, float MinSize, float MaxSize)
+{
+	float CurSize = Module(Vector);
+	return CurSize < MinSize ? Vector * (MinSize / CurSize) : (CurSize > MaxSize ? Vector * (MaxSize / CurSize) : Vector);
 }

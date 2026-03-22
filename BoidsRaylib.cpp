@@ -7,8 +7,8 @@
 #include "Boids.h"
 #include <iostream>
 
-constexpr float BoidLength = 12.f;
-constexpr float BoidWidth = 8.f;
+constexpr float BoidLength = 20.f;
+constexpr float BoidWidth = 15.f;
 
 void DrawBoid(const Vector2& Center, float AngleRotation, Color BoidColor)
 {
@@ -28,11 +28,11 @@ int main()
 {
 	// Initialization
 	 //--------------------------------------------------------------------------------------
-	const int screenWidth = 1280;
-	const int screenHeight = 720;
-
-	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
-	InitWindow(screenWidth, screenHeight, "Boids");
+	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_BORDERLESS_WINDOWED_MODE);
+	InitWindow(0, 0, "Boids");
+	const int screenWidth = GetScreenWidth();
+	const int screenHeight = GetScreenHeight() - 80;
+	SetWindowSize(screenWidth, screenHeight);
 	SetTargetFPS(144);
 	rlImGuiSetup(true);
 	bool bBoidsSettingWindowOpen = true;
@@ -84,7 +84,7 @@ int main()
 		for (size_t Index = 0; Index < NumBoids; ++Index)
 		{
 			const BoidData& Boid = BoidSystem->GetBoidData(Index);
-			DrawBoid(Boid.Center, Boid.Angle, { 255, 64, 64, 255 });
+			DrawBoid(Boid.Center, Boid.Angle, { 0, 128, 0, 255 });
 		}
 
 		EndDrawing();
